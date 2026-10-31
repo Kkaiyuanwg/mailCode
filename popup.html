@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mailCode</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section id="main-panel">
+        <div class="main-account-row">
+          <label class="sr-only" for="gmail-account-select">Gmail account for code searches</label>
+          <select id="gmail-account-select" class="account-select" disabled>
+            <option value="">Loading Gmail accounts…</option>
+          </select>
+          <span class="connection-badge disconnected" id="connection-badge">Sign in required</span>
+        </div>
+
+        <section id="watch-state" class="watch-state hidden" aria-live="polite">
+          <span class="watch-indicator"></span>
+          <div>
+            <strong id="watch-title">Waiting for a code</strong>
+            <span id="watch-detail">Gmail sync triggers checks, with a 30-second fallback.</span>
+          </div>
+        </section>
+
+        <section class="result-card" aria-live="polite">
+          <div class="result-heading">
+            <span class="account-label">LATEST MATCH</span>
+            <span id="result-time"></span>
+          </div>
+          <div class="code-row">
+            <div class="result-code" id="result-code">------</div>
+            <button id="copy-btn" class="copy-btn" disabled>Copy</button>
+          </div>
+          <strong id="email-subject" class="email-subject">No code found yet</strong>
+          <span id="email-from" class="email-from"></span>
+        </section>
+
+        <div class="action-row">
+          <button id="gmail-btn" class="primary-btn">Search unread</button>
+          <button id="page-btn" class="secondary-btn">Get code for page</button>
+        </div>
+        <footer class="popup-footer">
+          <p id="status" class="status">Ready. Automatic fill is enabled.</p>
+          <button id="settings-open-btn" class="settings-icon-btn" type="button" aria-label="Settings" title="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19.14 12.94a7.5 7.5 0 0 0 .05-.94 7.5 7.5 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94l-.36-2.54A.49.49 0 0 0 13.89 2h-3.78a.49.49 0 0 0-.49.42L9.26 4.96c-.59.23-1.14.55-1.63.94l-2.39-.96a.5.5 0 0 0-.61.22L2.71 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.5 7.5 0 0 0-.05.94c0 .32.02.63.05.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.12.2.36.29.61.22l2.39-.96c.49.39 1.04.71 1.63.94l.36 2.54c.04.24.25.42.49.42h3.78c.24 0 .45-.18.49-.42l.36-2.54a7.3 7.3 0 0 0 1.63-.94l2.39.96c.23.09.49 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/>
+            </svg>
+          </button>
+        </footer>
+      </section>
+
+      <section id="settings-panel" class="settings-panel hidden" aria-label="Settings">
+        <div class="settings-heading">
+          <div>
+            <span class="account-label">PREFERENCES</span>
+            <h2>Settings</h2>
+          </div>
+          <button id="settings-close-btn" class="icon-btn" type="button" aria-label="Back to code panel" title="Back">←</button>
+        </div>
+
+        <section class="settings-card">
+          <div class="settings-account-row">
+            <strong id="settings-account-email">No Gmail session detected</strong>
+            <span id="settings-connection-badge" class="connection-badge disconnected">Not connected</span>
+          </div>
+          <div class="settings-actions">
+            <button id="connect-btn" class="text-btn">Open Gmail</button>
+            <button id="refresh-accounts-btn" class="text-btn" type="button">Refresh accounts</button>
+          </div>
+        </section>
+
+        <section class="settings-card automation-card">
+          <div class="automation-copy">
+            <strong>Automatic code fill</strong>
+            <span>Watch for Gmail sync activity while a verification page is open</span>
+          </div>
+          <label class="switch" aria-label="Enable automatic code fill">
+            <input id="automation-toggle" type="checkbox" checked />
+            <span class="switch-slider"></span>
+          </label>
+        </section>
+
+        <p class="privacy-note">mailCode uses your signed-in Gmail session to read unread message summaries. Only enable auto-fill on sites you trust. Forms are never submitted.</p>
+        <p id="settings-status" class="status"></p>
+        <button id="settings-done-btn" class="settings-open-btn" type="button">Done</button>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-importScripts('gmail-service.js');
+if (typeof importScripts === 'function') importScripts('gmail-service.js');
 
 const WATCHES_KEY = 'pendingCodeWatches';
 const WATCH_ALARM = 'poll-for-confirmation-code';

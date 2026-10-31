@@ -54,25 +54,21 @@ jobs:
             cd "$RUNNER_TEMP/mailcode-firefox"
             zip -qr "$GITHUB_WORKSPACE/dist/mailCode-firefox-unsigned.xpi" .
           )
+          (
+            cd "$RUNNER_TEMP/mailcode-chrome"
+            zip -qr "$GITHUB_WORKSPACE/dist/mailCode-chrome.zip" .
+          )
 
-      - name: Build signed Chrome CRX
+      - name: Build Chrome CRX with a temporary key
         shell: bash
         env:
-          CHROME_EXTENSION_KEY: ${{ secrets.CHROME_EXTENSION_KEY }}
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
-          if [[ -z "$CHROME_EXTENSION_KEY" ]]; then
-            echo "::error::Add the persistent PEM private key as the CHROME_EXTENSION_KEY repository secret."
-            exit 1
-          fi
-
-          printf '%s\n' "$CHROME_EXTENSION_KEY" > "$RUNNER_TEMP/mailcode-extension.pem"
           "$CHROME_PATH" \
             --headless \
             --no-sandbox \
             --disable-gpu \
-            --pack-extension="$RUNNER_TEMP/mailcode-chrome" \
-            --pack-extension-key="$RUNNER_TEMP/mailcode-extension.pem"
+            --pack-extension="$RUNNER_TEMP/mailcode-chrome"
           test -s "$RUNNER_TEMP/mailcode-chrome.crx"
           cp "$RUNNER_TEMP/mailcode-chrome.crx" dist/mailCode-chrome.crx
 
@@ -80,6 +76,7 @@ jobs:
         shell: bash
         run: |
           test -s dist/mailCode-chrome.crx
+          test -s dist/mailCode-chrome.zip
           test -s dist/mailCode-firefox-unsigned.xpi
 
       - name: Upload packages
@@ -88,6 +85,7 @@ jobs:
           name: mailCode-browser-packages
           path: |
             dist/mailCode-chrome.crx
+            dist/mailCode-chrome.zip
             dist/mailCode-firefox-unsigned.xpi
           if-no-files-found: error
 
@@ -97,4 +95,5 @@ jobs:
         with:
           files: |
             dist/mailCode-chrome.crx
+            dist/mailCode-chrome.zip
             dist/mailCode-firefox-unsigned.xpi

@@ -2,6 +2,8 @@
 
 A lightweight Chrome extension that detects verification codes in recent Gmail messages and automatically fills verification fields on websites.
 
+![mailCode verification-code detection demo](./a.gif)
+
 ## Features
 
 - **Automatic code detection:** Finds verification codes in recent unread Gmail messages.

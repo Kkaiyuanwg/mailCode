@@ -23,42 +23,87 @@ function showFieldStatus(input, message, state = 'waiting') {
     statusTarget = input;
     statusHost = document.createElement('span');
     statusHost.setAttribute('data-confirmcode-status', '');
-    statusHost.style.cssText = 'display:block;margin:6px 0 0;line-height:normal;';
+    statusHost.style.cssText = 'display:block;margin:5px 0 0;line-height:normal;';
     statusRoot = statusHost.attachShadow({ mode: 'closed' });
-    input.insertAdjacentElement('afterend', statusHost);
+    const parentDisplay = input.parentElement
+      ? window.getComputedStyle(input.parentElement).display
+      : '';
+    const insertAfter = ['flex', 'inline-flex', 'grid', 'inline-grid'].includes(parentDisplay)
+      ? input.parentElement
+      : input;
+    insertAfter.insertAdjacentElement('afterend', statusHost);
   }
 
   const isComplete = state === 'complete';
   const isError = state === 'error';
   const label = document.createElement('span');
-  label.style.cssText = [
-    'display:inline-flex',
-    'align-items:center',
-    'gap:6px',
-    'padding:4px 8px',
-    'border:1px solid ' + (isComplete ? '#86efac' : isError ? '#fca5a5' : '#7dd3fc'),
-    'border-radius:999px',
-    'background:' + (isComplete ? '#f0fdf4' : isError ? '#fef2f2' : '#f0f9ff'),
-    'color:' + (isComplete ? '#166534' : isError ? '#991b1b' : '#075985'),
-    'font:500 11px/1.3 system-ui,sans-serif'
-  ].join(';');
+  label.className = 'status';
+  label.setAttribute('aria-label', `mailCode: ${message}`);
 
-  if (state === 'waiting') {
-    const spinner = document.createElement('span');
-    spinner.setAttribute('aria-hidden', 'true');
-    spinner.style.cssText = 'width:10px;height:10px;border:2px solid #bae6fd;border-top-color:#0284c7;border-radius:50%;animation:confirmcode-spin .8s linear infinite;';
-    label.append(spinner);
+  const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  icon.setAttribute('viewBox', '0 0 16 16');
+  icon.setAttribute('aria-hidden', 'true');
+  icon.classList.add('icon', isComplete ? 'complete' : isError ? 'error' : 'loading');
+
+  if (state === 'complete') {
+    const check = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    check.setAttribute('d', 'M3.5 8.2 6.5 11l6-6');
+    icon.append(check);
+  } else if (isError) {
+    const mark = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    mark.setAttribute('d', 'M8 2.5v6M8 11.5v.1');
+    icon.append(mark);
   } else {
-    const marker = document.createElement('span');
-    marker.textContent = isComplete ? '✓' : '!';
-    marker.setAttribute('aria-hidden', 'true');
-    marker.style.fontWeight = '700';
-    label.append(marker);
+    const spinner = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    spinner.setAttribute('cx', '8');
+    spinner.setAttribute('cy', '8');
+    spinner.setAttribute('r', '5.5');
+    icon.append(spinner);
   }
+  label.append(icon);
 
-  label.append(document.createTextNode(message));
+  const brand = document.createElement('span');
+  brand.textContent = 'mailCode';
+  brand.className = 'brand';
+  label.append(brand);
   const style = document.createElement('style');
-  style.textContent = '@keyframes confirmcode-spin{to{transform:rotate(360deg)}}';
+  style.textContent = `
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #80868b;
+      font: 400 10px/1.4 system-ui, sans-serif;
+      vertical-align: top;
+    }
+    .icon {
+      width: 13px;
+      height: 13px;
+      flex: 0 0 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+    .icon.loading, .status.loading, .status.loading .brand { color: #80868b; }
+    .icon.loading circle {
+      stroke-dasharray: 24 11;
+      transform-origin: center;
+      animation: mailcode-spin .8s linear infinite;
+    }
+    .icon.complete, .status.complete, .status.complete .brand { color: #188038; }
+    .icon.error, .status.error, .status.error .brand { color: #d93025; }
+    .brand {
+      font-weight: 600;
+    }
+    @keyframes mailcode-spin { to { transform: rotate(360deg); } }
+    @media (prefers-color-scheme: dark) {
+      .icon.loading, .status.loading, .status.loading .brand { color: #9aa0a6; }
+      .icon.complete, .status.complete, .status.complete .brand { color: #81c995; }
+      .icon.error, .status.error, .status.error .brand { color: #f28b82; }
+    }
+  `;
   statusRoot.replaceChildren(style, label);
   statusHost.setAttribute('role', 'status');
   statusHost.setAttribute('aria-live', 'polite');
@@ -193,7 +238,7 @@ async function startCodeWatch(input) {
     } else if (response?.status === 'waiting') {
       showFieldStatus(input, 'Waiting for Gmail sync · 30-second fallback checks');
     } else if (response?.status === 'complete') {
-      showFieldStatus(input, 'Code received and filled · form not submitted', 'complete');
+      showFieldStatus(input, 'Code filled · form not submitted', 'complete');
     }
     return response;
   } catch (error) {
@@ -261,7 +306,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (filled) {
       autoComplete = true;
       autoTarget = input;
-      showFieldStatus(input, 'Code received and filled · form not submitted', 'complete');
+      showFieldStatus(input, 'Code filled · form not submitted', 'complete');
     } else if (statusTarget?.isConnected) {
       showFieldStatus(statusTarget, 'Code found, but the verification field changed', 'error');
     }

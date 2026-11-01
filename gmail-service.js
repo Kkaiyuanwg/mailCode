@@ -33,12 +33,13 @@
   }
 
   function getCode(text) {
+    let latestCode = null;
     for (const match of text.matchAll(CODE_PATTERN)) {
       const code = match[1];
       if (code.length === 4 && /^(19|20)/.test(code)) continue;
-      return code;
+      latestCode = code;
     }
-    return null;
+    return latestCode;
   }
 
   function parseFeed(xml, afterMs) {
@@ -54,7 +55,8 @@
     for (const [, entry] of entries) {
       const subject = getTagText(entry, 'title') || 'Confirmation email';
       const summary = getTagText(entry, 'summary');
-      const code = getCode(`${subject}\n${summary}`);
+      const content = getTagText(entry, 'content');
+      const code = getCode(summary) || getCode(content) || getCode(subject);
       if (!code) continue;
 
       const internalDate = Date.parse(getTagText(entry, 'modified') || getTagText(entry, 'issued')) || 0;

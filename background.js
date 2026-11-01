@@ -4,6 +4,7 @@ const WATCHES_KEY = 'pendingCodeWatches';
 const WATCH_ALARM = 'poll-for-confirmation-code';
 const WATCH_INTERVAL_MINUTES = 0.5;
 const ACCOUNT_SLOT_KEY = 'gmailAccountSlot';
+const WATCH_TIMESTAMP_TOLERANCE_MS = 2000;
 const activePolls = new Set();
 let lastSyncPollAt = 0;
 let checkingSyncSignal = false;
@@ -256,7 +257,9 @@ async function pollWatch(tabId) {
       return { status: 'stopped' };
     }
 
-    const result = await findLatestCode(Math.max(0, watch.requestedAt - 5 * 60 * 1000));
+    const result = await findLatestCode(
+      Math.max(0, watch.requestedAt - WATCH_TIMESTAMP_TOLERANCE_MS)
+    );
 
     if (result) {
       await completeWatch(tabId, watch, result);
@@ -400,7 +403,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return true;
 });
 
-chrome.webRequest.onBeforeRequest.addListener((details) => {
+chrome.webRequest.onCompleted.addListener((details) => {
   const slot = details.url.match(/\/sync\/u\/(\d+)(?:\/|$)/)?.[1];
   if (!slot || details.tabId < 0 || checkingSyncSignal) return;
   checkingSyncSignal = true;
@@ -408,7 +411,7 @@ chrome.webRequest.onBeforeRequest.addListener((details) => {
   chrome.tabs.get(details.tabId).then(async (tab) => {
     if (!tab.active) return;
     if (slot !== await getAccountSlot()) return;
-    if (Date.now() - lastSyncPollAt < 10000) return;
+    if (Date.now() - lastSyncPollAt < 2000) return;
 
     lastSyncPollAt = Date.now();
     const watches = await getWatches();

@@ -1,24 +1,22 @@
 :root {
-  color-scheme: dark;
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  background: #0b1220;
-  color: #e7edf7;
+  color-scheme: light;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f6f8fb;
+  color: #202124;
 }
 
 body {
   width: 360px;
   min-height: 0;
   margin: 0;
-  background:
-    radial-gradient(ellipse at 85% 0%, rgba(34, 197, 94, 0.1), transparent 38%),
-    #0b1220;
+  background: #f6f8fb;
 }
 
 .app {
   display: flex;
   box-sizing: border-box;
   flex-direction: column;
-  padding: 12px 14px;
+  padding: 14px;
 }
 
 #main-panel:not(.hidden) {
@@ -36,40 +34,41 @@ body {
 .main-account-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .connection-badge {
   display: inline-block;
   padding: 5px 8px;
-  border: 1px solid #334155;
-  border-radius: 999px;
-  color: #cbd5e1;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  background: #fff;
+  color: #5f6368;
   font-size: 10px;
   white-space: nowrap;
 }
 
 .connection-badge.connected {
-  border-color: rgba(34, 197, 94, 0.35);
-  background: rgba(34, 197, 94, 0.1);
-  color: #86efac;
+  border-color: #ceead6;
+  background: #e6f4ea;
+  color: #137333;
 }
 
 .automation-card,
 .result-card,
 .settings-card {
-  border: 1px solid #263449;
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #dadce0;
+  border-radius: 10px;
+  background: #fff;
 }
 
 .account-label {
-  color: #94a3b8;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: #5f6368;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .text-btn {
@@ -77,9 +76,14 @@ body {
   padding: 0;
   margin: 0;
   background: transparent;
-  color: #7dd3fc;
+  color: #1967d2;
   font-size: 11px;
   font-weight: 600;
+}
+
+.text-btn:hover {
+  color: #174ea6;
+  text-decoration: underline;
 }
 
 .hidden {
@@ -93,14 +97,16 @@ body {
   flex: 0 0 auto;
   place-items: center;
   padding: 0;
-  border: 1px solid #263449;
-  background: #111c2e;
-  color: #cbd5e1;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  background: #fff;
+  color: #5f6368;
 }
 
-.icon-btn:hover {
-  background: #1e293b;
-  color: #f8fafc;
+.icon-btn:hover,
+.settings-icon-btn:hover {
+  background: #f1f3f4;
+  color: #202124;
 }
 
 .icon-btn svg {
@@ -139,15 +145,13 @@ body {
   justify-content: center;
   gap: 8px;
   margin-top: auto;
-  border: 1px solid #263449;
-  background: #111c2e;
-  color: #cbd5e1;
+  border: 1px solid #dadce0;
+  background: #fff;
+  color: #3c4043;
 }
 
 .settings-open-btn:hover {
-  border-color: #3b4d66;
-  background: #172338;
-  color: #f8fafc;
+  background: #f1f3f4;
 }
 
 .settings-open-btn svg {
@@ -159,7 +163,6 @@ body {
 .settings-card {
   padding: 12px;
   margin-bottom: 10px;
-  background: rgba(15, 23, 42, 0.85);
 }
 
 .settings-account-row {
@@ -172,7 +175,7 @@ body {
 
 .settings-account-row strong {
   overflow: hidden;
-  color: #f1f5f9;
+  color: #202124;
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -189,29 +192,32 @@ body {
   min-width: 0;
   box-sizing: border-box;
   padding: 8px 10px;
-  margin-top: 6px;
-  border: 1px solid #334155;
-  border-radius: 8px;
-  background: #0b1220;
-  color: #e7edf7;
+  margin-top: 0;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  background: #fff;
+  color: #202124;
   font: inherit;
   font-size: 12px;
   flex: 1;
 }
 
 .account-select:disabled {
-  color: #94a3b8;
+  color: #5f6368;
 }
 
 .automation-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 12px;
 }
 
 .privacy-note {
-  margin-top: 12px;
-  margin-bottom: 14px;
+  margin: 12px 0 14px;
+  color: #5f6368;
+  font-size: 10px;
+  line-height: 1.45;
 }
 
 .watch-state {
@@ -220,23 +226,30 @@ body {
   gap: 10px;
   padding: 11px 12px;
   margin-bottom: 12px;
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 10px;
-  background: rgba(14, 116, 144, 0.12);
+  border: 1px solid #d2e3fc;
+  border-radius: 8px;
+  background: #e8f0fe;
 }
 
 .watch-state.hidden {
   display: none;
 }
 
+.watch-state.watch-error {
+  border-color: #fce8e6;
+  background: #fef7f6;
+}
+
 .watch-indicator {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.6);
-  animation: watch-pulse 1.8s infinite;
+  background: #1a73e8;
+}
+
+.watch-error .watch-indicator {
+  background: #d93025;
 }
 
 .watch-state strong,
@@ -250,17 +263,8 @@ body {
 
 .watch-state div span {
   margin-top: 3px;
-  color: #94a3b8;
+  color: #5f6368;
   font-size: 10px;
-}
-
-@keyframes watch-pulse {
-  70% {
-    box-shadow: 0 0 0 7px rgba(56, 189, 248, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
-  }
 }
 
 .automation-copy strong,
@@ -274,7 +278,7 @@ body {
 
 .automation-copy span {
   margin-top: 4px;
-  color: #94a3b8;
+  color: #5f6368;
   font-size: 10px;
 }
 
@@ -295,7 +299,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: #475569;
+  background: #bdc1c6;
   cursor: pointer;
   transition: background 0.2s ease;
 }
@@ -307,13 +311,13 @@ body {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: white;
+  background: #fff;
   content: "";
   transition: transform 0.2s ease;
 }
 
 .switch input:checked + .switch-slider {
-  background: #22c55e;
+  background: #1a73e8;
 }
 
 .switch input:checked + .switch-slider::before {
@@ -322,17 +326,24 @@ body {
 
 button {
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px 12px;
   cursor: pointer;
   font: inherit;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 button:disabled {
   cursor: default;
-  opacity: 0.5;
+  opacity: 0.55;
+}
+
+button:focus-visible,
+select:focus-visible,
+.switch input:focus-visible + .switch-slider {
+  outline: 2px solid #1a73e8;
+  outline-offset: 2px;
 }
 
 .primary-btn,
@@ -348,18 +359,23 @@ button:disabled {
 }
 
 .primary-btn {
-  background: #22c55e;
-  color: #06210d;
+  background: #1a73e8;
+  color: #fff;
 }
 
 .primary-btn:hover:not(:disabled) {
-  background: #4ade80;
+  background: #1765cc;
 }
 
 .secondary-btn {
-  border: 1px solid #334155;
-  background: #172338;
-  color: #dbeafe;
+  border: 1px solid #dadce0;
+  background: #fff;
+  color: #3c4043;
+}
+
+.secondary-btn:hover:not(:disabled),
+.copy-btn:hover:not(:disabled) {
+  background: #f1f3f4;
 }
 
 .result-card {
@@ -372,7 +388,7 @@ button:disabled {
 }
 
 #result-time {
-  color: #64748b;
+  color: #80868b;
   font-size: 10px;
 }
 
@@ -381,17 +397,17 @@ button:disabled {
 }
 
 .result-code {
-  color: #86efac;
+  color: #202124;
   font-family: "Cascadia Code", Consolas, monospace;
   font-size: 34px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.12em;
 }
 
 .copy-btn {
   padding: 7px 10px;
-  background: #1e293b;
-  color: #e2e8f0;
+  background: #f1f3f4;
+  color: #3c4043;
 }
 
 .email-subject,
@@ -403,20 +419,20 @@ button:disabled {
 }
 
 .email-subject {
-  color: #e2e8f0;
+  color: #3c4043;
   font-size: 11px;
 }
 
 .email-from {
   margin-top: 4px;
-  color: #94a3b8;
+  color: #5f6368;
   font-size: 10px;
 }
 
 .status {
   min-width: 0;
   margin: 0;
-  color: #7dd3fc;
+  color: #5f6368;
   font-size: 10px;
   line-height: 1.4;
 }
@@ -430,8 +446,15 @@ button:disabled {
 }
 
 .popup-footer .status {
+  flex: 1;
   max-height: 2.8em;
   overflow: hidden;
+}
+
+.footer-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
 }
 
 .settings-icon-btn {
@@ -441,21 +464,161 @@ button:disabled {
   flex: 0 0 auto;
   place-items: center;
   padding: 0;
-  border: 1px solid #263449;
-  background: #111c2e;
-  color: #94a3b8;
-}
-
-.settings-icon-btn:hover {
-  border-color: #3b4d66;
-  background: #172338;
-  color: #f8fafc;
+  border: 1px solid #dadce0;
+  background: #fff;
+  color: #5f6368;
 }
 
 .settings-icon-btn svg {
   width: 18px;
   height: 18px;
   fill: currentColor;
+}
+
+.theme-toggle .sun-icon {
+  display: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  background: #080808;
+  color: #e8eaed;
+}
+
+:root[data-theme="dark"] body {
+  background: #080808;
+}
+
+:root[data-theme="dark"] .connection-badge,
+:root[data-theme="dark"] .icon-btn,
+:root[data-theme="dark"] .settings-open-btn,
+:root[data-theme="dark"] .account-select,
+:root[data-theme="dark"] .secondary-btn,
+:root[data-theme="dark"] .settings-icon-btn {
+  border-color: #353535;
+  background: #1b1b1b;
+  color: #e8eaed;
+}
+
+:root[data-theme="dark"] .connection-badge {
+  color: #bdc1c6;
+}
+
+:root[data-theme="dark"] .connection-badge.connected {
+  border-color: #285d3b;
+  background: #1e3a2a;
+  color: #81c995;
+}
+
+:root[data-theme="dark"] .automation-card,
+:root[data-theme="dark"] .result-card,
+:root[data-theme="dark"] .settings-card {
+  border-color: #292929;
+  background: #141414;
+}
+
+:root[data-theme="dark"] .account-label,
+:root[data-theme="dark"] .email-from,
+:root[data-theme="dark"] .privacy-note,
+:root[data-theme="dark"] .automation-copy span,
+:root[data-theme="dark"] .watch-state div span,
+:root[data-theme="dark"] .status {
+  color: #9aa0a6;
+}
+
+:root[data-theme="dark"] .text-btn {
+  color: #8ab4f8;
+}
+
+:root[data-theme="dark"] .text-btn:hover {
+  color: #aecbfa;
+}
+
+:root[data-theme="dark"] .settings-account-row strong,
+:root[data-theme="dark"] .automation-copy strong,
+:root[data-theme="dark"] .email-subject,
+:root[data-theme="dark"] .result-code,
+:root[data-theme="dark"] .settings-heading h2 {
+  color: #e8eaed;
+}
+
+:root[data-theme="dark"] .account-select:disabled {
+  color: #9aa0a6;
+}
+
+:root[data-theme="dark"] .watch-state {
+  border-color: #263753;
+  background: #111a28;
+}
+
+:root[data-theme="dark"] .watch-state.watch-error {
+  border-color: #512d2b;
+  background: #211312;
+}
+
+:root[data-theme="dark"] .watch-indicator {
+  background: #8ab4f8;
+}
+
+:root[data-theme="dark"] .watch-error .watch-indicator {
+  background: #f28b82;
+}
+
+:root[data-theme="dark"] .switch-slider {
+  background: #5f6368;
+}
+
+:root[data-theme="dark"] .switch input:checked + .switch-slider {
+  background: #8ab4f8;
+}
+
+:root[data-theme="dark"] button:focus-visible,
+:root[data-theme="dark"] select:focus-visible,
+:root[data-theme="dark"] .switch input:focus-visible + .switch-slider {
+  outline-color: #8ab4f8;
+}
+
+:root[data-theme="dark"] .primary-btn {
+  background: #8ab4f8;
+  color: #080808;
+}
+
+:root[data-theme="dark"] .primary-btn:hover:not(:disabled) {
+  background: #aecbfa;
+}
+
+:root[data-theme="dark"] .secondary-btn:hover:not(:disabled),
+:root[data-theme="dark"] .copy-btn:hover:not(:disabled),
+:root[data-theme="dark"] .icon-btn:hover,
+:root[data-theme="dark"] .settings-icon-btn:hover,
+:root[data-theme="dark"] .settings-open-btn:hover {
+  background: #292929;
+  color: #fff;
+}
+
+:root[data-theme="dark"] #result-time {
+  color: #9aa0a6;
+}
+
+:root[data-theme="dark"] .copy-btn {
+  background: #252525;
+  color: #e8eaed;
+}
+
+:root[data-theme="dark"] .status.error {
+  color: #f28b82;
+}
+
+:root[data-theme="dark"] .theme-toggle .moon-icon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .sun-icon {
+  display: block;
+}
+
+.status.error {
+  color: #b3261e;
 }
 
 .sr-only {
@@ -466,11 +629,4 @@ button:disabled {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   clip-path: inset(50%);
-}
-
-.privacy-note {
-  margin: 8px 0 0;
-  color: #64748b;
-  font-size: 10px;
-  line-height: 1.45;
 }

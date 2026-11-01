@@ -15,6 +15,7 @@ const watchState = document.getElementById('watch-state');
 const watchTitle = document.getElementById('watch-title');
 const watchDetail = document.getElementById('watch-detail');
 const settingsOpenButton = document.getElementById('settings-open-btn');
+const themeToggle = document.getElementById('theme-toggle');
 const settingsCloseButton = document.getElementById('settings-close-btn');
 const settingsDoneButton = document.getElementById('settings-done-btn');
 const mainPanel = document.getElementById('main-panel');
@@ -25,9 +26,18 @@ const settingsStatus = document.getElementById('settings-status');
 
 function setStatus(message, isError = false) {
   statusText.textContent = message;
-  statusText.style.color = isError ? '#fca5a5' : '#7dd3fc';
+  statusText.classList.toggle('error', isError);
   settingsStatus.textContent = message;
-  settingsStatus.style.color = isError ? '#fca5a5' : '#7dd3fc';
+  settingsStatus.classList.toggle('error', isError);
+}
+
+function applyTheme(theme) {
+  const selectedTheme = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.dataset.theme = selectedTheme;
+  const nextTheme = selectedTheme === 'dark' ? 'light' : 'dark';
+  const label = `Switch to ${nextTheme} theme`;
+  themeToggle.setAttribute('aria-label', label);
+  themeToggle.title = label;
 }
 
 function setConnection(email, connected) {
@@ -120,6 +130,20 @@ settingsOpenButton.addEventListener('click', () => showSettings(true));
 settingsCloseButton.addEventListener('click', () => showSettings(false));
 settingsDoneButton.addEventListener('click', () => showSettings(false));
 
+themeToggle.addEventListener('click', async () => {
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  themeToggle.disabled = true;
+  try {
+    await chrome.storage.local.set({ uiTheme: theme });
+    applyTheme(theme);
+  } catch (error) {
+    console.error('ConfirmCode could not save the color theme:', error);
+    setStatus('Could not save the appearance setting.', true);
+  } finally {
+    themeToggle.disabled = false;
+  }
+});
+
 async function saveEmailResult(result, source) {
   const saved = { ...result, savedAt: Date.now() };
   await chrome.storage.local.set({
@@ -174,8 +198,10 @@ async function loadPopupState() {
   const stored = await chrome.storage.local.get([
     'lastEmail',
     'autoFillEnabled',
-    'automationState'
+    'automationState',
+    'uiTheme'
   ]);
+  applyTheme(stored.uiTheme);
   automationToggle.checked = stored.autoFillEnabled !== false;
   renderEmail(stored.lastEmail);
   renderAutomationState(stored.automationState);
@@ -352,6 +378,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
   }
   if (changes.autoFillEnabled) {
     automationToggle.checked = changes.autoFillEnabled.newValue !== false;
+  }
+  if (changes.uiTheme) {
+    applyTheme(changes.uiTheme.newValue);
   }
 });
 
